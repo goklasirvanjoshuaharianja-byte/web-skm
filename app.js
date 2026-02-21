@@ -1,32 +1,32 @@
-require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const path = require("path");
+require("dotenv").config();
 
 const app = express();
 
-// Connect MongoDB
-mongoose.connect("mongodb://127.0.0.1:27017/organisasi")
+// Middleware
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.static(path.join(__dirname, "public")));
+
+// View Engine
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
+
+// MongoDB Connection
+mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB Connected"))
   .catch(err => console.log(err));
 
-// Middleware
-app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, "public")));
-app.set("view engine", "ejs");
-
 // Routes
-const indexRouter = require("./routes/index");
-const membersRouter = require("./routes/members");
-const galleryRouter = require("./routes/gallery");
+const memberRoutes = require("./routes/members");
+app.use("/anggota", memberRoutes);
 
-app.use("/", indexRouter);
-app.use("/anggota", membersRouter);
-app.use("/gallery", galleryRouter);
-
-const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+app.get("/", (req, res) => {
+  res.render("home");
 });
 
+// ❌ HAPUS app.listen()
+// ✅ Export untuk Vercel
+module.exports = app;
