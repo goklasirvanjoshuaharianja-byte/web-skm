@@ -1,22 +1,18 @@
 const mongoose = require("mongoose");
 
-const MemberSchema = new mongoose.Schema({
-  name: {
+const memberSchema = new mongoose.Schema({
+  nama: {
     type: String,
     required: true
   },
-  position: String,
-  bio: String,
-  instagram: String,
-  linkedin: String,
+  jabatan: {
+    type: String,
+    required: true
+  },
   photo: {
     type: String,
-    default: "default.png"
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now
+    required: true
   }
 });
 
-module.exports = mongoose.model("Member", MemberSchema);
+module.exports = mongoose.model("Member", memberSchema);

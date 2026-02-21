@@ -27,6 +27,5 @@ app.get("/", (req, res) => {
   res.render("home");
 });
 
-// ❌ HAPUS app.listen()
-// ✅ Export untuk Vercel
+
 module.exports = app;

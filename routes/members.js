@@ -1,71 +1,60 @@
 const express = require("express");
 const router = express.Router();
 const Member = require("../models/Member");
-const multer = require("multer");
-const path = require("path");
 
-// =====================
-// KONFIGURASI MULTER
-// =====================
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "public/uploads/");
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname));
-  }
+const multer = require("multer");
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+const cloudinary = require("cloudinary").v2;
+
+// CONFIG CLOUDINARY
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-const upload = multer({ storage: storage });
+// STORAGE CLOUDINARY
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "web-skm",
+    allowed_formats: ["jpg", "png", "jpeg"],
+  },
+});
 
-// =====================
-// FORM TAMBAH ANGGOTA
-// =====================
+const upload = multer({ storage });
+
+// ===============================
+// LIST ANGGOTA
+// ===============================
+router.get("/", async (req, res) => {
+  const members = await Member.find();
+  res.render("anggota", { members });
+});
+
+// ===============================
+// FORM TAMBAH
+// ===============================
 router.get("/tambah", (req, res) => {
   res.render("tambah-anggota");
 });
 
-// =====================
-// PROSES SIMPAN ANGGOTA
-// =====================
+// ===============================
+// SIMPAN ANGGOTA
+// ===============================
 router.post("/tambah", upload.single("photo"), async (req, res) => {
   try {
-    const { name, position, bio, instagram, linkedin } = req.body;
-
-    await Member.create({
-      name,
-      position,
-      bio,
-      instagram,
-      linkedin,
-      photo: req.file ? req.file.filename : "default.png"
+    const newMember = new Member({
+      nama: req.body.nama,
+      jabatan: req.body.jabatan,
+      photo: req.file.path // URL dari Cloudinary
     });
 
+    await newMember.save();
     res.redirect("/anggota");
   } catch (err) {
     console.log(err);
-    res.send("Terjadi kesalahan");
-  }
-});
-
-// =====================
-// LIST ANGGOTA
-// =====================
-router.get("/", async (req, res) => {
-  const members = await Member.find().sort({ createdAt: -1 });
-  res.render("anggota", { members });
-});
-
-// =====================
-// DETAIL PROFILE
-// =====================
-router.get("/:id", async (req, res) => {
-  try {
-    const member = await Member.findById(req.params.id);
-    if (!member) return res.send("Member tidak ditemukan");
-    res.render("profile", { member });
-  } catch (err) {
-    res.send("Member tidak ditemukan");
+    res.send("Error saat menyimpan anggota");
   }
 });
 

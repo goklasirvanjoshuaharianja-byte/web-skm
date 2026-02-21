@@ -1,48 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Tambah Anggota</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-50 p-10 min-h-screen">
+<h1>Tambah Anggota</h1>
 
-<div class="max-w-md mx-auto bg-white p-8 rounded-2xl shadow-lg">
-
-  <h1 class="text-2xl font-bold text-emerald-700 mb-6 text-center">
-    Tambah Anggota
-  </h1>
-
-  <form action="/anggota/tambah"
-        method="POST"
-        enctype="multipart/form-data"
-        class="space-y-4">
-
-    <input type="text" name="name" placeholder="Nama"
-           class="w-full p-3 border rounded" required>
-
-    <input type="text" name="position" placeholder="Jabatan"
-           class="w-full p-3 border rounded">
-
-    <textarea name="bio" placeholder="Bio"
-              class="w-full p-3 border rounded"></textarea>
-
-    <input type="text" name="instagram" placeholder="Link Instagram"
-           class="w-full p-3 border rounded">
-
-    <input type="text" name="linkedin" placeholder="Link LinkedIn"
-           class="w-full p-3 border rounded">
-
-    <input type="file" name="photo"
-           class="w-full p-3 border rounded"
-           accept="image/*">
-
-    <button class="w-full bg-emerald-600 text-white py-3 rounded-lg hover:bg-emerald-700 transition">
-      Simpan
-    </button>
-
-  </form>
-
-</div>
-
-</body>
-</html>
+<form action="/anggota/tambah" method="POST" enctype="multipart/form-data">
+  <input type="text" name="nama" placeholder="Nama" required>
+  <input type="text" name="jabatan" placeholder="Jabatan" required>
+  <input type="file" name="photo" required>
+  <button type="submit">Simpan</button>
+</form>

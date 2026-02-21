@@ -1,57 +1,13 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Anggota</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-50 min-h-screen">
+<h1>Daftar Anggota</h1>
 
-<section class="bg-gradient-to-r from-emerald-900 to-teal-700 text-white py-16 text-center">
-  <h1 class="text-4xl font-bold">Anggota Kami</h1>
-  <p class="mt-2 opacity-90">Total: <%= members.length %> Anggota</p>
-</section>
+<a href="/anggota/tambah">Tambah Anggota</a>
 
-<section class="py-16 px-6">
-  <div class="max-w-6xl mx-auto">
-
-    <% if (members.length === 0) { %>
-      <div class="text-center">
-        <h2 class="text-2xl text-gray-600 mb-4">Belum ada anggota</h2>
-        <a href="/anggota/tambah"
-           class="bg-emerald-600 text-white px-6 py-3 rounded-full">
-           Tambah Sekarang
-        </a>
-      </div>
-    <% } else { %>
-
-      <div class="grid md:grid-cols-3 lg:grid-cols-4 gap-10">
-
-        <% members.forEach(member => { %>
-
-          <a href="/anggota/<%= member._id %>"
-             class="bg-white rounded-2xl shadow-md hover:shadow-xl transition transform hover:-translate-y-2 p-6 text-center">
-
-            <img src="/uploads/<%= member.photo %>"
-                 class="w-28 h-28 mx-auto rounded-full object-cover border-4 border-emerald-100 mb-4">
-
-            <h3 class="font-semibold text-lg">
-              <%= member.name %>
-            </h3>
-
-            <p class="text-emerald-600 text-sm">
-              <%= member.position %>
-            </p>
-
-          </a>
-
-        <% }) %>
-
-      </div>
-
-    <% } %>
-
-  </div>
-</section>
-
-</body>
-</html>
+<div>
+  <% members.forEach(member => { %>
+    <div style="margin-bottom:20px;">
+      <img src="<%= member.photo %>" width="150">
+      <h3><%= member.nama %></h3>
+      <p><%= member.jabatan %></p>
+    </div>
+  <% }) %>
+</div>
